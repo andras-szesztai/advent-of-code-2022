@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { getDataSet } from './dataSetUtil'
 
 import {
     getRoundPoints,
@@ -7,13 +7,7 @@ import {
     PlayerShapes,
 } from './day2PartOne'
 
-export const dataSet = fs
-    .readFileSync(
-        '/Users/anszeszt2101/GitHub/advent-of-code/src/day2/data.txt',
-        'utf8'
-    )
-    .split('\n')
-    .map((d) => d.split(' ')) as [OpponentShapes, PlayerShapes][]
+export const dataSet = getDataSet<OpponentShapes, PlayerShapes>()
 
 describe('getRoundPoints', () => {
     it('returns correct points for round won', () => {
