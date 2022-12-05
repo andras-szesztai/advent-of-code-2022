@@ -3,12 +3,13 @@ import fs from 'fs'
 import { stacks, Stacks } from './data'
 import {
     getLastCratesFromEachStack,
-    getNCratesToKeep,
-    getNCratesToMove,
+    getCratesToKeep,
+    getCratesToMove,
     getResult,
     parseProcedureText,
     reverseCratesOrder,
     updateStacks,
+    splitStack,
 } from './day5'
 
 const dataSet = fs
@@ -19,34 +20,34 @@ const dataSet = fs
     .split('\n')
 
 describe('Day 5', () => {
-    describe('getNCratesToMove', () => {
+    describe('getCratesToMove', () => {
         it('returns the first n crates to move', () => {
             const stack = ['R', 'G', 'J', 'B', 'T', 'V', 'Z']
             const n = 3
             const expected = ['T', 'V', 'Z']
-            const actual = getNCratesToMove(stack, n)
+            const actual = getCratesToMove(stack, n)
             expect(actual).toEqual(expected)
         })
         it('returns same array if n is greater than array length', () => {
             const stack = ['R', 'G', 'J']
             const n = 4
-            const actual = getNCratesToMove(stack, n)
+            const actual = getCratesToMove(stack, n)
             expect(actual).toEqual(stack)
         })
         it('returns empty array if n is 0', () => {
             const stack = ['R', 'G', 'J']
             const n = 0
-            const actual = getNCratesToMove(stack, n)
+            const actual = getCratesToMove(stack, n)
             expect(actual).toEqual([])
         })
     })
 
-    describe('getNCratesToKeep', () => {
+    describe('getCratesToKeep', () => {
         it('returns the last n crates to keep', () => {
             const stack = ['R', 'G', 'J', 'B', 'T', 'V', 'Z']
             const n = 3
-            const expected = ['R', 'G', 'J']
-            const actual = getNCratesToKeep(stack, n)
+            const expected = ['R', 'G', 'J', 'B']
+            const actual = getCratesToKeep(stack, n)
             expect(actual).toEqual(expected)
         })
     })
@@ -61,8 +62,25 @@ describe('Day 5', () => {
 
         it('returns same array if crates is empty', () => {
             const crates: string[] = []
-            const actual = reverseCratesOrder(crates)
-            expect(actual).toEqual(crates)
+            expect(reverseCratesOrder(crates)).toEqual(crates)
+        })
+    })
+
+    describe('splitStack', () => {
+        it('returns crates to move and crates to keep', () => {
+            const crates = ['R', 'G', 'J', 'B', 'T', 'V', 'Z']
+            const expected = [
+                ['T', 'V', 'Z'],
+                ['R', 'G', 'J', 'B'],
+            ]
+            expect(splitStack(crates, 3)).toEqual(expected)
+        })
+        it('returns empty array for crates to keep of n is greater than crates length', () => {
+            const crates = ['R', 'G', 'J']
+            expect(splitStack(crates, 4)).toEqual([crates, []])
+        })
+        it('returns empty arrays for crates to move if crates length is 0', () => {
+            expect(splitStack([], 3)).toEqual([[], []])
         })
     })
 

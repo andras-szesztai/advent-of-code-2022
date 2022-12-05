@@ -1,18 +1,29 @@
 import { Stacks } from './data'
 
-export const getNCratesToMove = (stack: string[], n: number) => {
-    if (n >= stack.length) {
+export const getCratesToMove = (stack: string[], numberOfCrates: number) => {
+    if (numberOfCrates >= stack.length) {
         return stack
     }
-    return [...stack].splice(stack.length - n)
+    return [...stack].splice(stack.length - numberOfCrates)
 }
 
-export const getNCratesToKeep = (stack: string[], n: number) => {
-    return [...stack].slice(0, n)
+export const getCratesToKeep = (stack: string[], numberOfCrates: number) => {
+    const numberToKeep = stack.length - numberOfCrates
+    if (numberToKeep <= 0) {
+        return []
+    }
+    return [...stack].slice(0, numberToKeep)
 }
 
-export const reverseCratesOrder = (crates: string[]) => {
-    return [...crates].reverse()
+export const splitStack = (stack: string[], numberOfCrates: number) => {
+    return [
+        getCratesToMove(stack, numberOfCrates),
+        getCratesToKeep(stack, numberOfCrates),
+    ] as const
+}
+
+export const reverseCratesOrder = (stack: string[]) => {
+    return [...stack].reverse()
 }
 
 export const updateStacks = (
@@ -25,18 +36,17 @@ export const updateStacks = (
     if (Object.keys(stacks).length === 0 || !stacks[from] || !stacks[to]) {
         return stacks
     }
-    const copyStacks = { ...stacks }
-    let cratesToMove = getNCratesToMove(copyStacks[from], numberOfCrates)
-    if (movedIsReversed) {
-        cratesToMove = reverseCratesOrder(cratesToMove)
-    }
-    const cratesToKeep = getNCratesToKeep(
-        copyStacks[from],
-        copyStacks[from].length - numberOfCrates
+    const copiedStacks = { ...stacks }
+    const [cratesToMove, cratesToKeep] = splitStack(
+        copiedStacks[from],
+        numberOfCrates
     )
-    copyStacks[from] = cratesToKeep
-    copyStacks[to] = [...copyStacks[to], ...cratesToMove]
-    return copyStacks
+    copiedStacks[from] = cratesToKeep
+    copiedStacks[to] = [
+        ...copiedStacks[to],
+        ...(movedIsReversed ? reverseCratesOrder(cratesToMove) : cratesToMove),
+    ]
+    return copiedStacks
 }
 
 export const parseProcedureText = (text: string) => {
@@ -71,5 +81,6 @@ export const getResult = (
             movedIsReversed
         )
     })
-    return getLastCratesFromEachStack(currentStack).join('')
+    const lastCrates = getLastCratesFromEachStack(currentStack)
+    return lastCrates.join('')
 }
