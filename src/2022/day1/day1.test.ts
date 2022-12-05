@@ -1,8 +1,14 @@
 import fs from 'fs'
 
-import { sumCalories, getHighestNCalorieSums } from "./day1";
+import { sumCalories, getHighestNCalorieSums } from './day1'
 
-export const dataSet = fs.readFileSync('/Users/anszeszt2101/GitHub/advent-of-code/src/day1/data.txt', 'utf8').split('\n\n').map(d => d.split('\n').map(d => +d))
+export const dataSet = fs
+    .readFileSync(
+        '/Users/anszeszt2101/GitHub/advent-of-code/src/2022/day1/data.txt',
+        'utf8'
+    )
+    .split('\n\n')
+    .map((d) => d.split('\n').map((d) => +d))
 
 describe('sumCalories', () => {
     it('should return 0 when given an empty array', () => {

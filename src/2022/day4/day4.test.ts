@@ -11,7 +11,7 @@ import {
 
 const dataSet = fs
     .readFileSync(
-        '/Users/anszeszt2101/GitHub/advent-of-code/src/day4/data.txt',
+        '/Users/anszeszt2101/GitHub/advent-of-code/src/2022/day4/data.txt',
         'utf8'
     )
     .split('\n')
