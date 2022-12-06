@@ -20,10 +20,9 @@ export const findStartOfMarker = (
             if (uniqCharacters.length === uniqCharactersLength - 1) {
                 startOfPacketIndex = index
                 return false
-            } else {
-                uniqCharacters = [...uniqCharacters, char]
-                return true
             }
+            uniqCharacters = [...uniqCharacters, char]
+            return true
         }
         uniqCharacters = [
             ...removeDuplicateFromCollector(uniqCharacters, char),
