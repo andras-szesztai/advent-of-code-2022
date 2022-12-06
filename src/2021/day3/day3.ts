@@ -1,4 +1,5 @@
 type Bit = '1' | '0'
+type Keep = 'moreCommon' | 'lessCommon'
 
 export const pivotBinaries = (binaries: string[]) => {
     const pivotedBinaries = binaries.reduce((acc, binary) => {
@@ -41,4 +42,44 @@ export const getConsumption = (binaries: string[]) => {
     )
     const newBinaries = createBinariesFromBitCount(bitCounts)
     return parseInt(newBinaries[0], 2) * parseInt(newBinaries[1], 2)
+}
+
+export const filterBinariesByBit = (
+    binaries: string[],
+    currentBitIndex: number,
+    toKeep: Keep
+) => {
+    const bitsToCount = binaries.map((binary) => binary[currentBitIndex])
+    const bitCount = getBitCount(bitsToCount as Bit[])
+    let bitToFilterFor = ''
+    if (toKeep === 'moreCommon') {
+        bitToFilterFor = bitCount['0'] <= bitCount['1'] ? '1' : '0'
+    }
+    if (toKeep === 'lessCommon') {
+        bitToFilterFor = bitCount['0'] <= bitCount['1'] ? '0' : '1'
+    }
+    return binaries.filter(
+        (binary) => binary[currentBitIndex] === bitToFilterFor
+    )
+}
+
+export const getGeneratorRating = (binaries: string[], type: Keep) => {
+    if (binaries.length === 0) {
+        return ''
+    }
+    let filteredBinaries: string[] = binaries
+    binaries[0].split('').every((_, idx) => {
+        if (filteredBinaries.length > 1) {
+            filteredBinaries = filterBinariesByBit(filteredBinaries, idx, type)
+            return true
+        }
+        return false
+    })
+    return filteredBinaries[0]
+}
+
+export const getLifeSupportRating = (binaries: string[]) => {
+    const oxygenGeneratorRating = getGeneratorRating(binaries, 'moreCommon')
+    const co2ScrubberRating = getGeneratorRating(binaries, 'lessCommon')
+    return parseInt(oxygenGeneratorRating, 2) * parseInt(co2ScrubberRating, 2)
 }
