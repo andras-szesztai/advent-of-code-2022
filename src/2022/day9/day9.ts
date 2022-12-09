@@ -18,44 +18,68 @@ export const getUpdatedHeadPosition = (
     }
 }
 
-export const getUpdatedTailPosition = (
-    headPosition: [number, number],
-    tailPosition: [number, number]
+export const getUpdatedKnotPosition = (
+    positionToFollow: [number, number],
+    positionToUpdate: [number, number]
 ): [number, number] => {
-    const xDifference = Math.abs(headPosition[0] - tailPosition[0])
-    const yDifference = Math.abs(headPosition[1] - tailPosition[1])
+    const xDifference = Math.abs(positionToFollow[0] - positionToUpdate[0])
+    const yDifference = Math.abs(positionToFollow[1] - positionToUpdate[1])
+    const updatedPosition = [...positionToUpdate]
+    const moveByY = positionToFollow[1] > updatedPosition[1] ? 1 : -1
+    const moveByX = positionToFollow[0] > updatedPosition[0] ? 1 : -1
+    if (xDifference === 2 && yDifference === 2) {
+        return [updatedPosition[0] + moveByX, updatedPosition[1] + moveByY]
+    }
     if (yDifference === 2 && xDifference === 1) {
-        const moveBy = headPosition[1] > tailPosition[1] ? 1 : -1
-        return [headPosition[0], tailPosition[1] + moveBy]
+        return [positionToFollow[0], updatedPosition[1] + moveByY]
     }
     if (xDifference === 2 && yDifference === 1) {
-        const moveBy = headPosition[0] > tailPosition[0] ? 1 : -1
-        return [tailPosition[0] + moveBy, headPosition[1]]
+        return [updatedPosition[0] + moveByX, positionToFollow[1]]
     }
     if (yDifference === 2) {
-        const moveBy = headPosition[1] > tailPosition[1] ? 1 : -1
-        return [tailPosition[0], tailPosition[1] + moveBy]
+        return [updatedPosition[0], updatedPosition[1] + moveByY]
     }
     if (xDifference === 2) {
-        const moveBy = headPosition[0] > tailPosition[0] ? 1 : -1
-        return [tailPosition[0] + moveBy, tailPosition[1]]
+        return [updatedPosition[0] + moveByX, updatedPosition[1]]
     }
-    return tailPosition
+    return positionToUpdate
+}
+
+const getUpdatedKnotPositions = (
+    knotPositions: [number, number][] = [],
+    numberOfKnots: number,
+    headPosition: [number, number]
+) => {
+    const newKnottedPositions = [...knotPositions]
+    Array.from(Array(numberOfKnots - 1)).forEach((_num, index) => {
+        const positionToFollow = newKnottedPositions[index - 1] || headPosition
+        const currentPosition = newKnottedPositions[index]
+        newKnottedPositions[index] = getUpdatedKnotPosition(
+            positionToFollow,
+            currentPosition || [0, 0]
+        )
+    })
+    return newKnottedPositions
 }
 
 export const getNumberUniqueTailPositions = (
-    headMoves: [Direction, number[]][]
+    headMoves: [Direction, number[]][],
+    numberOfKnots = 2
 ) => {
     let tailPositionCollection: string[] = []
     let headPosition: [number, number] = [0, 0]
-    let tailPosition: [number, number] = [0, 0]
+    let knotPositions: [number, number][] = []
     headMoves.forEach(([direction, moves]) => {
         moves.forEach(() => {
             headPosition = getUpdatedHeadPosition(headPosition, direction)
-            tailPosition = getUpdatedTailPosition(headPosition, tailPosition)
+            knotPositions = getUpdatedKnotPositions(
+                knotPositions,
+                numberOfKnots,
+                headPosition
+            )
             tailPositionCollection = [
                 ...tailPositionCollection,
-                tailPosition.toString(),
+                knotPositions[knotPositions.length - 1].toString(),
             ]
         })
     })

@@ -4,7 +4,7 @@ import {
     Direction,
     getNumberUniqueTailPositions,
     getUpdatedHeadPosition,
-    getUpdatedTailPosition,
+    getUpdatedKnotPosition,
 } from './day9'
 
 const headMoves = fs
@@ -27,28 +27,28 @@ describe('day 9', () => {
             expect(getUpdatedHeadPosition([0, 0], 'R')).toEqual([1, 0])
         })
     })
-    describe('getUpdatedTailPosition', () => {
-        it('moves tail diagonally', () => {
-            expect(getUpdatedTailPosition([4, 2], [3, 0])).toEqual([4, 1])
-            expect(getUpdatedTailPosition([4, 0], [3, 2])).toEqual([4, 1])
-            expect(getUpdatedTailPosition([-5, 2], [-3, 1])).toEqual([-4, 2])
-            expect(getUpdatedTailPosition([-3, 2], [-5, 1])).toEqual([-4, 2])
+    describe('getUpdatedKnotPosition', () => {
+        it('moves knot element diagonally', () => {
+            expect(getUpdatedKnotPosition([4, 2], [3, 0])).toEqual([4, 1])
+            expect(getUpdatedKnotPosition([4, 0], [3, 2])).toEqual([4, 1])
+            expect(getUpdatedKnotPosition([-5, 2], [-3, 1])).toEqual([-4, 2])
+            expect(getUpdatedKnotPosition([-3, 2], [-5, 1])).toEqual([-4, 2])
         })
-        it('moves tail vertically', () => {
-            expect(getUpdatedTailPosition([4, 2], [4, 0])).toEqual([4, 1])
-            expect(getUpdatedTailPosition([-4, -2], [4, 0])).toEqual([4, -1])
-            expect(getUpdatedTailPosition([4, 2], [4, 4])).toEqual([4, 3])
-            expect(getUpdatedTailPosition([-4, -2], [4, -4])).toEqual([4, -3])
+        it('moves knot vertically', () => {
+            expect(getUpdatedKnotPosition([4, 2], [4, 0])).toEqual([4, 1])
+            expect(getUpdatedKnotPosition([-4, -2], [4, 0])).toEqual([4, -1])
+            expect(getUpdatedKnotPosition([4, 2], [4, 4])).toEqual([4, 3])
+            expect(getUpdatedKnotPosition([-4, -2], [4, -4])).toEqual([4, -3])
         })
-        it('moves tail horizontally', () => {
-            expect(getUpdatedTailPosition([4, 2], [2, 2])).toEqual([3, 2])
-            expect(getUpdatedTailPosition([-4, 2], [-2, 2])).toEqual([-3, 2])
-            expect(getUpdatedTailPosition([4, 2], [6, 2])).toEqual([5, 2])
-            expect(getUpdatedTailPosition([-4, 2], [-6, 2])).toEqual([-5, 2])
+        it('moves knot horizontally', () => {
+            expect(getUpdatedKnotPosition([4, 2], [2, 2])).toEqual([3, 2])
+            expect(getUpdatedKnotPosition([-4, 2], [-2, 2])).toEqual([-3, 2])
+            expect(getUpdatedKnotPosition([4, 2], [6, 2])).toEqual([5, 2])
+            expect(getUpdatedKnotPosition([-4, 2], [-6, 2])).toEqual([-5, 2])
         })
         it('does not move if positions are the same', () => {
-            expect(getUpdatedTailPosition([4, 2], [4, 2])).toEqual([4, 2])
-            expect(getUpdatedTailPosition([4, 2], [3, 1])).toEqual([3, 1])
+            expect(getUpdatedKnotPosition([4, 2], [4, 2])).toEqual([4, 2])
+            expect(getUpdatedKnotPosition([4, 2], [3, 1])).toEqual([3, 1])
         })
     })
 
@@ -68,6 +68,22 @@ describe('day 9', () => {
         })
         it('returns result for part one', () => {
             expect(getNumberUniqueTailPositions(headMoves)).toEqual(6197)
+        })
+        it('returns correct number of unique tail positions with longer knot', () => {
+            const testData: [Direction, number[]][] = [
+                ['R', [1, 1, 1, 1]],
+                ['U', [1, 1, 1, 1]],
+                ['L', [1, 1, 1]],
+                ['D', [1]],
+                ['R', [1, 1, 1, 1]],
+                ['D', [1]],
+                ['L', [1, 1, 1, 1, 1]],
+                ['R', [1, 1]],
+            ]
+            expect(getNumberUniqueTailPositions(testData, 10)).toEqual(1)
+        })
+        it('returns result for part two', () => {
+            expect(getNumberUniqueTailPositions(headMoves, 10)).toEqual(2562)
         })
     })
 })
