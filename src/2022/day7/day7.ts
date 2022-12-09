@@ -73,29 +73,40 @@ export const buildFileSystem = (outputs: string[]) => {
     return fileSystem
 }
 
+const getDirectorySize = (directory: Directory): number => {
+    return Object.entries(directory).reduce((acc, [, value]) => {
+        if (typeof value === 'number') {
+            return acc + value
+        }
+        return acc + getDirectorySize(value as Directory)
+    }, 0)
+}
+
+const crawlFileSystemForSizes = (
+    directory: Directory,
+    directorySizes: Record<string, number>,
+    parentKey = ''
+) => {
+    Object.entries(directory).forEach(([key, value]) => {
+        if (typeof value !== 'number') {
+            const currentKey = `${parentKey}${key}`
+            directorySizes[currentKey] = getDirectorySize(value as Directory)
+            crawlFileSystemForSizes(
+                value as Directory,
+                directorySizes,
+                currentKey
+            )
+        }
+    })
+    return directorySizes
+}
+
 export const getDirectorySizes = (fileSystem: Directory) => {
-    const directorySizes: Record<string, number> = {}
-    const getDirectorySize = (directory: Directory): number => {
-        return Object.entries(directory).reduce((acc, [, value]) => {
-            if (typeof value === 'number') {
-                return acc + value
-            }
-            return acc + getDirectorySize(value as Directory)
-        }, 0)
-    }
-    const crawlFileSystem = (directory: Directory, parentKey = '') => {
-        Object.entries(directory).forEach(([key, value]) => {
-            if (typeof value !== 'number') {
-                const currentKey = `${parentKey}${key}`
-                directorySizes[currentKey] = getDirectorySize(
-                    value as Directory
-                )
-                crawlFileSystem(value as Directory, currentKey)
-            }
-        })
-        return directorySizes
-    }
-    return crawlFileSystem(fileSystem)
+    const directorySizes = crawlFileSystemForSizes(
+        fileSystem,
+        {} as Record<string, number>
+    )
+    return directorySizes
 }
 
 export const getDirectorySizesSumBelowThreshold = (
