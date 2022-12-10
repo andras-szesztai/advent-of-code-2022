@@ -1,3 +1,5 @@
+import { sum } from '../../utils/utils'
+
 import data from './data'
 
 import {
@@ -5,7 +7,6 @@ import {
     getNumberOfIncreasedValues,
     getWindowsArray,
     isIncreased,
-    sum,
 } from './day1'
 
 describe('day1', () => {
@@ -75,16 +76,6 @@ describe('day1', () => {
                 [1, 2, 3],
                 [2, 3, 4],
             ])
-        })
-    })
-
-    describe('sum', () => {
-        it('returns 0 if the input is empty', () => {
-            expect(sum([])).toBe(0)
-        })
-
-        it('returns the sum of the input', () => {
-            expect(sum([1, 2, 3])).toBe(6)
         })
     })
 })

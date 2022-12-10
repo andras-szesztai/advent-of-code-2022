@@ -22,6 +22,3 @@ export const getWindowsArray = (values: number[], windowSize: number) => {
     return windowsArray
 }
 
-export const sum = (values: number[]) => {
-    return values.reduce((sum, value) => sum + value, 0)
-}

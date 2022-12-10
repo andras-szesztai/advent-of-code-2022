@@ -1,4 +1,4 @@
-import { sum } from '../../2021/day1/day1'
+import { chunkArray, sum } from '../../utils/utils'
 
 export const splitStringHalf = (str: string) => {
     const half = Math.round(str.length / 2)
@@ -62,17 +62,6 @@ export const getUniqSharedCharacter = (strings: string[]) => {
         return strings.every((string) => string.includes(character))
     })
     return sharedCharacter || ''
-}
-
-export const chunkArray = (array: string[], chunkSize: number) => {
-    if (chunkSize <= 0) {
-        return array
-    }
-    const chunkedArray = []
-    for (let i = 0; i < array.length; i += chunkSize) {
-        chunkedArray.push(array.slice(i, i + chunkSize))
-    }
-    return chunkedArray
 }
 
 export const getPartTwoResult = (dataSet: string[]) => {

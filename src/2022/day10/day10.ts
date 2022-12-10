@@ -1,5 +1,4 @@
-import { sum } from '../../2021/day1/day1'
-import { chunkArray } from '../day3/day3'
+import { chunkArray, sum } from '../../utils/utils'
 
 type Instruction = 'addx' | 'noop'
 export type ProgramStep = [instruction: Instruction, valueChange: number]

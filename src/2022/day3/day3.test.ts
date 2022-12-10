@@ -9,7 +9,6 @@ import {
     splitStringHalf,
     getPartOneResult,
     getUniqSharedCharacter,
-    chunkArray,
     getPartTwoResult,
 } from './day3'
 
@@ -107,28 +106,6 @@ describe('Day 3', () => {
         })
         it('returns zero if length of strings is zero', () => {
             expect(getUniqSharedCharacter([])).toBe('')
-        })
-    })
-
-    describe('chunkArray', () => {
-        it('returns an array of arrays of passed in chunk size', () => {
-            expect(
-                chunkArray(['1', '2', '3', '4', '5', '6', '7', '8', '9'], 3)
-            ).toEqual([
-                ['1', '2', '3'],
-                ['4', '5', '6'],
-                ['7', '8', '9'],
-            ])
-        })
-        it('returns same array if chunk size is smaller or equal to 0', () => {
-            expect(
-                chunkArray(['1', '2', '3', '4', '5', '6', '7', '8', '9'], -2)
-            ).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9'])
-        })
-        it('returns same array one level nested if chunk size is bigger than array length', () => {
-            expect(
-                chunkArray(['1', '2', '3', '4', '5', '6', '7', '8', '9'], 10)
-            ).toEqual([['1', '2', '3', '4', '5', '6', '7', '8', '9']])
         })
     })
 
