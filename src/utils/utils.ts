@@ -12,3 +12,17 @@ export const chunkArray = (array: string[], chunkSize: number) => {
     }
     return chunkedArray
 }
+
+
+export const pivotData = <T>(data: T[][]) => {
+    const pivotedBoard: T[][] = []
+    data.forEach((row, rowIndex) => {
+        return row.map((el, columnIndex) => {
+            if (!pivotedBoard[columnIndex]) {
+                pivotedBoard[columnIndex] = []
+            }
+            pivotedBoard[columnIndex][rowIndex] = el
+        })
+    })
+    return pivotedBoard
+}

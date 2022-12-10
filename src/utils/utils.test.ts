@@ -1,4 +1,4 @@
-import { chunkArray, sum } from './utils'
+import { chunkArray, pivotData, sum } from './utils'
 
 describe('utils', () => {
     describe('sum', () => {
@@ -30,6 +30,35 @@ describe('utils', () => {
             expect(
                 chunkArray(['1', '2', '3', '4', '5', '6', '7', '8', '9'], 10)
             ).toEqual([['1', '2', '3', '4', '5', '6', '7', '8', '9']])
+        })
+    })
+
+    describe('pivotData', () => {
+        it('should pivot a board', () => {
+            expect(
+                pivotData([
+                    [1, 2, 3, 4],
+                    [4, 5, 6, 7],
+                    [7, 8, 9, 9],
+                ])
+            ).toEqual([
+                [1, 4, 7],
+                [2, 5, 8],
+                [3, 6, 9],
+                [4, 7, 9],
+            ])
+            expect(
+                pivotData([
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [3, 6, 9],
+                    [4, 7, 9],
+                ])
+            ).toEqual([
+                [1, 2, 3, 4],
+                [4, 5, 6, 7],
+                [7, 8, 9, 9],
+            ])
         })
     })
 })
