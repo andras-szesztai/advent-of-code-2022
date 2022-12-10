@@ -67,58 +67,115 @@ describe('2021 day 5', () => {
     })
 
     describe('drawLine', () => {
-        it('returns all points on a line', () => {
+        it('returns all points on a non-diagonal line', () => {
             expect(
-                drawLine([
-                    [1, 3],
-                    [1, 1],
-                ])
+                drawLine(
+                    [
+                        [1, 3],
+                        [1, 1],
+                    ],
+                    false
+                )
             ).toEqual([
                 [1, 3],
                 [1, 2],
                 [1, 1],
             ])
             expect(
-                drawLine([
-                    [1, 1],
-                    [1, 3],
-                ])
+                drawLine(
+                    [
+                        [1, 1],
+                        [1, 3],
+                    ],
+                    false
+                )
             ).toEqual([
                 [1, 1],
                 [1, 2],
                 [1, 3],
             ])
             expect(
-                drawLine([
-                    [3, 1],
-                    [1, 1],
-                ])
+                drawLine(
+                    [
+                        [3, 1],
+                        [1, 1],
+                    ],
+                    false
+                )
             ).toEqual([
                 [3, 1],
                 [2, 1],
                 [1, 1],
             ])
             expect(
-                drawLine([
-                    [1, 1],
-                    [3, 1],
-                ])
+                drawLine(
+                    [
+                        [1, 1],
+                        [3, 1],
+                    ],
+                    false
+                )
             ).toEqual([
                 [1, 1],
                 [2, 1],
                 [3, 1],
             ])
             expect(
-                drawLine([
-                    [1, 5],
-                    [1, 1],
-                ])
+                drawLine(
+                    [
+                        [1, 5],
+                        [1, 1],
+                    ],
+                    false
+                )
             ).toEqual([
                 [1, 5],
                 [1, 4],
                 [1, 3],
                 [1, 2],
                 [1, 1],
+            ])
+        })
+        it('returns all points on a diagonal line', () => {
+            expect(
+                drawLine(
+                    [
+                        [1, 1],
+                        [3, 3],
+                    ],
+                    true
+                )
+            ).toEqual([
+                [1, 1],
+                [2, 2],
+                [3, 3],
+            ])
+            expect(
+                drawLine(
+                    [
+                        [3, 3],
+                        [1, 1],
+                    ],
+                    true
+                )
+            ).toEqual([
+                [3, 3],
+                [2, 2],
+                [1, 1],
+            ])
+            expect(
+                drawLine(
+                    [
+                        [5, 5],
+                        [8, 2],
+                    ],
+                    true
+                )
+            ).toEqual([
+                [5, 5],
+                [6, 4],
+                [7, 3],
+                [8, 2],
             ])
         })
     })
@@ -167,10 +224,10 @@ describe('2021 day 5', () => {
                     [8, 2],
                 ],
             ] as Line[]
-            expect(getPointsWhereNonDiagonalLinesOverlap(testData)).toEqual(5)
+            expect(getPointsWhereNonDiagonalLinesOverlap(testData)).toEqual(12)
         })
-        it('returns solution for part one', () => {
-            expect(getPointsWhereNonDiagonalLinesOverlap(lines)).toEqual(6_461)
+        it('returns solution for part two', () => {
+            expect(getPointsWhereNonDiagonalLinesOverlap(lines)).toEqual(18_065)
         })
     })
 })
