@@ -1,40 +1,33 @@
 import fs from 'fs'
 
 import {
+    drawPixel,
+    getCrtDrawing,
     getPerCycleSignalStrength,
     getSignalStrengthsForSpecificCycles,
     getSignalStrengthSum,
     parseInstruction,
     ProgramStep,
 } from './day10'
+import { parseProgramSteps } from './programParseUtils'
 
-const testProgramOne = fs
-    .readFileSync(
-        '/Users/anszeszt2101/GitHub/advent-of-code/src/2022/day10/programOne.txt',
-        'utf8'
-    )
-    .split('\n')
-    .map((d) => {
-        const instructionElements = d.split(' ')
-        return [
-            instructionElements[0],
-            instructionElements[1] ? +instructionElements[1] : 0,
-        ]
-    }) as ProgramStep[]
+const testProgramOne = parseProgramSteps(
+    fs
+        .readFileSync(
+            '/Users/anszeszt2101/GitHub/advent-of-code/src/2022/day10/programOne.txt',
+            'utf8'
+        )
+        .split('\n')
+)
 
-const testProgramTwo = fs
-    .readFileSync(
-        '/Users/anszeszt2101/GitHub/advent-of-code/src/2022/day10/programTwo.txt',
-        'utf8'
-    )
-    .split('\n')
-    .map((d) => {
-        const instructionElements = d.split(' ')
-        return [
-            instructionElements[0],
-            instructionElements[1] ? +instructionElements[1] : 0,
-        ]
-    }) as ProgramStep[]
+const testProgramTwo = parseProgramSteps(
+    fs
+        .readFileSync(
+            '/Users/anszeszt2101/GitHub/advent-of-code/src/2022/day10/programTwo.txt',
+            'utf8'
+        )
+        .split('\n')
+)
 
 describe('day10', () => {
     describe('parseInstruction', () => {
@@ -103,6 +96,40 @@ describe('day10', () => {
                 [20, 60, 100, 140, 180, 220]
             )
             expect(result).toEqual(12_740)
+        })
+    })
+
+    describe('drawPixel', () => {
+        it('draws pixel to correct positions', () => {
+            expect(drawPixel(1, 1)).toBe('#')
+            expect(drawPixel(4, 16)).toBe('.')
+            expect(drawPixel(39, 1)).toBe('.')
+            expect(drawPixel(40, 1)).toBe('#')
+        })
+    })
+
+    describe('getCrtDrawing', () => {
+        it('returns correct crt drawing', () => {
+            const result = getCrtDrawing(testProgramOne)
+            expect(result).toEqual([
+                '##..##..##..##..##..##..##..##..##..##..',
+                '###...###...###...###...###...###...###.',
+                '####....####....####....####....####....',
+                '#####.....#####.....#####.....#####.....',
+                '######......######......######......####',
+                '#######.......#######.......#######.....',
+            ])
+        })
+        it('returns part two solution', () => {
+            const result = getCrtDrawing(testProgramTwo)
+            expect(result).toEqual([
+                '###..###..###...##..###...##...##..####.',
+                '#..#.#..#.#..#.#..#.#..#.#..#.#..#.#....',
+                '#..#.###..#..#.#..#.#..#.#..#.#....###..',
+                '###..#..#.###..####.###..####.#.##.#....',
+                '#.#..#..#.#....#..#.#.#..#..#.#..#.#....',
+                '#..#.###..#....#..#.#..#.#..#..###.#....',
+            ])
         })
     })
 })

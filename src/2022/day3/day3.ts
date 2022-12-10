@@ -1,3 +1,5 @@
+import { sum } from '../../2021/day1/day1'
+
 export const splitStringHalf = (str: string) => {
     const half = Math.round(str.length / 2)
     return [str.slice(0, half), str.slice(half)]
@@ -41,10 +43,6 @@ export const getCharacterScore = (character: string) => {
         }
     }
     return 0
-}
-
-export const sum = (array: number[]) => {
-    return array.reduce((a, b) => a + b, 0)
 }
 
 export const getCharacterScoresSum = (characters: string[]) => {

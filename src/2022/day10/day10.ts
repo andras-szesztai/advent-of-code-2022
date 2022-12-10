@@ -1,3 +1,6 @@
+import { sum } from '../../2021/day1/day1'
+import { chunkArray } from '../day3/day3'
+
 type Instruction = 'addx' | 'noop'
 export type ProgramStep = [instruction: Instruction, valueChange: number]
 
@@ -49,8 +52,24 @@ export const getSignalStrengthSum = (
         program,
         cycles
     )
-    return signalStrengthForSpecificCycles.reduce(
-        (sum, signalStrength) => sum + signalStrength,
-        0
+    return sum(signalStrengthForSpecificCycles)
+}
+
+export const drawPixel = (cycle: number, signalStrength: number) => {
+    if (Math.abs((cycle % 40) - signalStrength) <= 1) {
+        return '#'
+    }
+    return '.'
+}
+
+export const getCrtDrawing = (program: ProgramStep[]) => {
+    const perCycleSignalStrength = getPerCycleSignalStrength(program)
+    const drawingArray: string[] = []
+    perCycleSignalStrength.forEach((signalStrength, cycle) => {
+        drawingArray.push(drawPixel(cycle - 1, signalStrength))
+    })
+    const chunkedDrawingArray = chunkArray(drawingArray, 40).slice(0, -1) // remove last cycle pixel
+    return chunkedDrawingArray.map((row) =>
+        Array.isArray(row) ? row.join('') : row
     )
 }

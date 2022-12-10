@@ -7,7 +7,6 @@ import {
     getUniqueDuplicates,
     isDuplicateCharacter,
     splitStringHalf,
-    sum,
     getPartOneResult,
     getUniqSharedCharacter,
     chunkArray,
@@ -77,15 +76,6 @@ describe('Day 3', () => {
         })
         it('returns 0 if the character is more than one character long', () => {
             expect(getCharacterScore('ab')).toBe(0)
-        })
-    })
-
-    describe('sum', () => {
-        it('returns the sum of an array of numbers', () => {
-            expect(sum([1, 2, 3])).toBe(6)
-        })
-        it('returns 0 if the array is empty', () => {
-            expect(sum([])).toBe(0)
         })
     })
 
