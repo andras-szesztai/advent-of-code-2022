@@ -51,14 +51,14 @@ const getUpdatedKnotPositions = (
     headPosition: [number, number]
 ) => {
     const newKnottedPositions = [...knotPositions]
-    Array.from(Array(numberOfKnots - 1)).forEach((_num, index) => {
-        const positionToFollow = newKnottedPositions[index - 1] || headPosition
-        const currentPosition = newKnottedPositions[index]
-        newKnottedPositions[index] = getUpdatedKnotPosition(
+    for (let i = 0; i < numberOfKnots - 1; i++) {
+        const positionToFollow = newKnottedPositions[i - 1] || headPosition
+        const currentPosition = newKnottedPositions[i]
+        newKnottedPositions[i] = getUpdatedKnotPosition(
             positionToFollow,
             currentPosition || [0, 0]
         )
-    })
+    }
     return newKnottedPositions
 }
 

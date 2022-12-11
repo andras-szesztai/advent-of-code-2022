@@ -33,9 +33,9 @@ export const getFishCountForNumberOfDays = (
     numberOfDays: number
 ) => {
     const fishByTimer = countFishByInternalTimer(fishTimers)
-    Array.from(Array(numberOfDays).keys()).forEach(() => {
+    for (let i = 0; i < numberOfDays; i++) {
         const copiedFishByTimer = new Map(fishByTimer)
         fishByTimer.forEach(updateFishByTimer(copiedFishByTimer))
-    })
+    }
     return sum(Array.from(fishByTimer.values()))
 }
