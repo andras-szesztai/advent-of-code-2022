@@ -2,12 +2,10 @@ export type MonkeyData = {
     items: number[]
     operation: (old: number) => number
     divider: number
-    goesTo: (worryLevel: number, divider: number) => number
+    goesTo: (worryLevel: number) => number
     numberOfItemsInspected: number
 }
 export type MonkeysMap = Map<number, MonkeyData>
-
-const defaultChangeToWorryLevelWhenPassed = (worryLevel: number) => worryLevel
 
 export const getTopNNumberOfInspectedItems = (
     monkeyData: MonkeysMap,
@@ -24,27 +22,32 @@ export const getTopNNumberOfInspectedItems = (
 const updateMonkeyDataPerItem =
     (
         monkeyData: MonkeysMap,
-        data: Pick<MonkeyData, 'divider' | 'goesTo' | 'operation'>,
-        modulo: number,
-        changeToWorryLevelWhenPassed = defaultChangeToWorryLevelWhenPassed
+        data: Pick<MonkeyData, 'goesTo' | 'operation'>,
+        changeToWorryLevelWhenPassed: (worryLevel: number) => number,
+        dividerModulo?: number
     ) =>
     (item: number) => {
         const newItemWorryLevel = Math.floor(
             changeToWorryLevelWhenPassed(data.operation(item))
         )
-        const toUpdate = data.goesTo(newItemWorryLevel, data.divider)
+        const toUpdate = data.goesTo(newItemWorryLevel)
         const monkeyObjectToUpdate = monkeyData.get(toUpdate)!
         monkeyData.set(toUpdate, {
             ...monkeyObjectToUpdate,
-            items: [...monkeyObjectToUpdate.items, newItemWorryLevel % modulo],
+            items: [
+                ...monkeyObjectToUpdate.items,
+                dividerModulo
+                    ? newItemWorryLevel % dividerModulo
+                    : newItemWorryLevel,
+            ],
         })
     }
 
 const updateMonkeyDataPerMonkey =
     (
         monkeyData: MonkeysMap,
-        modulo: number,
-        changeToWorryLevelWhenPassed = defaultChangeToWorryLevelWhenPassed
+        changeToWorryLevelWhenPassed: (worryLevel: number) => number,
+        dividerModulo?: number
     ) =>
     (
         { items, numberOfItemsInspected, ...restData }: MonkeyData,
@@ -54,37 +57,30 @@ const updateMonkeyDataPerMonkey =
             updateMonkeyDataPerItem(
                 monkeyData,
                 restData,
-                modulo,
-                changeToWorryLevelWhenPassed
+                changeToWorryLevelWhenPassed,
+                dividerModulo
             )
         )
         monkeyData.set(index, {
-            ...restData,
             items: [],
             numberOfItemsInspected: numberOfItemsInspected + items.length,
+            ...restData,
         })
     }
-
-// Help: needed to check modulo for solution part 2
-const getModulo = (monkeyData: MonkeysMap) => {
-    return Array.from(monkeyData.values()).reduce((acc, curr) => {
-        return acc * curr.divider
-    }, 1)
-}
 
 const getLevelOfMonkeyBusiness = (
     monkeyData: MonkeysMap,
     numberOfRounds: number,
-    changeToWorryLevelWhenPassed = defaultChangeToWorryLevelWhenPassed
+    changeToWorryLevelWhenPassed: (worryLevel: number) => number,
+    dividerModulo?: number
 ) => {
     const copiedMonkeyData = new Map(monkeyData)
-    const modulo = getModulo(copiedMonkeyData)
     for (let i = 0; i < numberOfRounds; i++) {
         copiedMonkeyData.forEach(
             updateMonkeyDataPerMonkey(
                 copiedMonkeyData,
-                modulo,
-                changeToWorryLevelWhenPassed
+                changeToWorryLevelWhenPassed,
+                dividerModulo
             )
         )
     }
@@ -103,6 +99,18 @@ export const getLevelOfMonkeyBusinessPartOne = (monkeyData: MonkeysMap) => {
     )
 }
 
+// Help: needed to check modulo for solution part 2
+const getDividerModulo = (monkeyData: MonkeysMap) => {
+    return Array.from(monkeyData.values()).reduce((acc, curr) => {
+        return acc * curr.divider
+    }, 1)
+}
+
 export const getLevelOfMonkeyBusinessPartTwo = (monkeyData: MonkeysMap) => {
-    return getLevelOfMonkeyBusiness(monkeyData, 10000)
+    return getLevelOfMonkeyBusiness(
+        monkeyData,
+        10000,
+        (worryLevel) => worryLevel,
+        getDividerModulo(monkeyData)
+    )
 }

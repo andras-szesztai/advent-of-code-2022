@@ -1,4 +1,5 @@
 import { monkeys, testMonkeys } from './data'
+
 import {
     getLevelOfMonkeyBusinessPartOne,
     getLevelOfMonkeyBusinessPartTwo,
@@ -12,14 +13,14 @@ describe('2022 day 11', () => {
         })
         it('returns solution for part one', () => {
             const result = getLevelOfMonkeyBusinessPartOne(monkeys)
-            expect(result).toBe(98_908)
+            expect(result).toBe(98_280)
         })
     })
 
     describe('getLevelOfMonkeyBusinessPartTwo', () => {
         it('returns correct value for test data', () => {
             const result = getLevelOfMonkeyBusinessPartTwo(testMonkeys)
-            expect(result).toBe(2713310158)
+            expect(result).toBe(2_713_310_158)
         })
         it('returns solution for part one', () => {
             const result = getLevelOfMonkeyBusinessPartTwo(monkeys)
