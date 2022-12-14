@@ -62,3 +62,10 @@ export const analyzePackets = (
     }
     return isUndefined(isOrdered) ? true : isOrdered
 }
+
+
+export const orderPackets = (packets: Packet[][]): Packet[][] => {
+    return packets.sort((packetLeft, packetRight) =>
+        analyzePackets(packetLeft, packetRight) ? -1 : 1
+    )
+}

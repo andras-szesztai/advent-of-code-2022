@@ -1,6 +1,11 @@
 import fs from 'fs'
 
-import { analyzePackets, getOrderedPacketIndicesSum, Packet } from './day13'
+import {
+    analyzePackets,
+    getOrderedPacketIndicesSum,
+    orderPackets,
+    Packet,
+} from './day13'
 
 const testPackets = [
     [
@@ -67,6 +72,20 @@ describe('day 13', () => {
         })
         it('returns solution for part one', () => {
             expect(getOrderedPacketIndicesSum(inputData)).toEqual(5555)
+        })
+    })
+
+    describe('orderPackets', () => {
+        it('returns ascending ordered packets', () => {
+            const result = orderPackets([...testPackets.flat(), [[2]], [[6]]])
+            expect(result[9]).toEqual([[2]])
+            expect(result[13]).toEqual([[6]])
+        })
+
+        it('returns solution for part two', () => {
+            const result = orderPackets([...inputData.flat(), [[2]], [[6]]])
+            expect(result[115]).toEqual([[2]])
+            expect(result[196]).toEqual([[6]])
         })
     })
 })
