@@ -4,6 +4,7 @@ import {
     Coordinate,
     getAllLineCoordinates,
     getNumberOfSandsBeforeAbyss,
+    getNumberOfSandsBeforeFilling,
     simulateSandFalling,
 } from './day14'
 
@@ -203,6 +204,21 @@ describe('day 14 2022', () => {
                 )
             ).toEqual([497, 4])
         })
+        it('simulates sand falling with infinite ground', () => {
+            expect(
+                simulateSandFalling(
+                    [
+                        [-Infinity, 4],
+                        [Infinity, 4],
+                        [500, 3],
+                        [499, 3],
+                        [501, 3],
+                        [500, 2],
+                    ],
+                    4
+                )
+            ).toEqual([498, 4])
+        })
     })
 
     describe('getNumberOfSandsBeforeAbyss', () => {
@@ -223,7 +239,29 @@ describe('day 14 2022', () => {
             expect(getNumberOfSandsBeforeAbyss(testData)).toBe(24)
         })
         it.skip('returns solution for part one', () => {
-            expect(getNumberOfSandsBeforeAbyss(rockData)).toBe(1016)
+            expect(getNumberOfSandsBeforeAbyss(rockData)).toBe(1_016)
+        })
+    })
+
+    describe('getNumberOfSandsBeforeFilling', () => {
+        it('gets number of sands before filling', () => {
+            const testData: Coordinate[][] = [
+                [
+                    [498, 4],
+                    [498, 6],
+                    [496, 6],
+                ],
+                [
+                    [503, 4],
+                    [502, 4],
+                    [502, 9],
+                    [494, 9],
+                ],
+            ]
+            expect(getNumberOfSandsBeforeFilling(testData)).toBe(93)
+        })
+        it.skip('returns solution for part two', () => {
+            expect(getNumberOfSandsBeforeFilling(rockData)).toBe(25_402)
         })
     })
 })

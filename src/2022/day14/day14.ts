@@ -107,3 +107,29 @@ export const getNumberOfSandsBeforeAbyss = (
     }
     return sandPositions.length
 }
+
+export const getNumberOfSandsBeforeFilling = (
+    rockCoordinates: Coordinate[][]
+) => {
+    const allRockCoordinates = rockCoordinates.map(getAllLineCoordinates).flat()
+    const maxY = Math.max(...allRockCoordinates.map((c) => c[1] + 2))
+    const allRockCoordinatesWithFloor: Coordinate[] = [
+        ...allRockCoordinates,
+        [Infinity, maxY],
+        [-Infinity, maxY],
+    ]
+    const sandPositions: Coordinate[] = []
+    while (true) {
+        const newSandCoordinate = simulateSandFalling(
+            [...allRockCoordinatesWithFloor, ...sandPositions],
+            maxY
+        )
+        if (newSandCoordinate[1] === maxY) {
+            sandPositions.push([newSandCoordinate[0], newSandCoordinate[1] - 1])
+        } else {
+            sandPositions.push(newSandCoordinate)
+            if (newSandCoordinate[1] === 0) break
+        }
+    }
+    return sandPositions.length
+}
